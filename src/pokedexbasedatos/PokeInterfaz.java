@@ -5,30 +5,17 @@
  */
 package pokedexbasedatos;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-
 /**
  *
  * @author agomezcastro
  */
-public class PokeInterfaz2 extends javax.swing.JFrame {
+public class PokeInterfaz extends javax.swing.JFrame {
 
     /**
-     * Creates new form PokeInterfaz2
+     * Creates new form PokeInterfaz
      */
-    
-    public void transparente(JButton boton){
-        boton.setOpaque(false);
-        boton.setContentAreaFilled(false);
-        boton.setBorderPainted(false);
-    }
-    
-    public PokeInterfaz2() {
+    public PokeInterfaz() {
         initComponents();
-        transparente(jButton1);
-        transparente(jButton2);
-        jLabel1.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/Imágenes/pokedex1.gif"));
     }
 
     /**
@@ -40,30 +27,31 @@ public class PokeInterfaz2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(null);
 
-        jButton1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jButton1.setText("1");
-        getContentPane().add(jButton1);
-        jButton1.setBounds(460, 310, 50, 30);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 573, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 543, Short.MAX_VALUE)
+        );
 
-        jButton2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jButton2.setText("2");
-        getContentPane().add(jButton2);
-        jButton2.setBounds(510, 310, 50, 30);
-
-        jLabel2.setBackground(new java.awt.Color(0, 255, 0));
-        jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(90, 190, 240, 130);
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 970, 580);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -85,28 +73,25 @@ public class PokeInterfaz2 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PokeInterfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PokeInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PokeInterfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PokeInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PokeInterfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PokeInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PokeInterfaz2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PokeInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PokeInterfaz2().setVisible(true);
+                new PokeInterfaz().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
