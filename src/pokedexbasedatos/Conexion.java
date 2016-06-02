@@ -19,7 +19,7 @@ public class Conexion {
             Class.forName("com.mysql.jdbc.Driver");
             conexion=(Connection) DriverManager.getConnection("jdbc:mysql://10.0.0.254/agomezcastro", 
                     "agomezcastro", "agomezcastro");
-            JOptionPane.showMessageDialog(null, "Conectado");
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error de conexion");
         } catch (ClassNotFoundException ex) {

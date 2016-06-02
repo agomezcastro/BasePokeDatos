@@ -5,17 +5,27 @@
  */
 package pokedexbasedatos;
 
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author agomezcastro
  */
 public class pokeInterfaz extends javax.swing.JFrame {
-
+    private Statement state;
     /**
      * Creates new form pokeInterfaz
      */
     public pokeInterfaz() {
         initComponents();
+        imgOak.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/oak.png"));
     }
 
     /**
@@ -30,32 +40,79 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        etqID = new javax.swing.JLabel();
+        etqNombre = new javax.swing.JLabel();
+        etqTipo1 = new javax.swing.JLabel();
+        etqTipo2 = new javax.swing.JLabel();
+        etqAltura = new javax.swing.JLabel();
+        etqPeso = new javax.swing.JLabel();
+        etqNaturaleza = new javax.swing.JLabel();
+        etqDescripcion = new javax.swing.JLabel();
+        campoID = new javax.swing.JTextField();
+        campoNombre = new javax.swing.JTextField();
+        campoTipo1 = new javax.swing.JTextField();
+        campoTipo2 = new javax.swing.JTextField();
+        campoAltura = new javax.swing.JTextField();
+        campoPeso = new javax.swing.JTextField();
+        campoNaturaleza = new javax.swing.JTextField();
+        botonInsertar = new javax.swing.JButton();
+        imgOak = new javax.swing.JLabel();
+        botonEliminar = new javax.swing.JButton();
+        botonModificar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        campoDescripcion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Id:");
+        etqID.setText("Id:");
 
-        jLabel2.setText("Nombre:");
+        etqNombre.setText("Nombre:");
 
-        jLabel3.setText("Tipo1:");
+        etqTipo1.setText("Tipo1:");
 
-        jLabel4.setText("Tipo2:");
+        etqTipo2.setText("Tipo2:");
 
-        jLabel5.setText("Altura:");
+        etqAltura.setText("Altura (metros):");
 
-        jLabel6.setText("Peso:");
+        etqPeso.setText("Peso (kg):");
 
-        jLabel7.setText("Naturaleza:");
+        etqNaturaleza.setText("Naturaleza:");
 
-        jLabel8.setText("Descripcion:");
+        etqDescripcion.setText("Descripcion:");
+
+        campoNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoNombreActionPerformed(evt);
+            }
+        });
+
+        botonInsertar.setText("Insertar");
+        botonInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonInsertarActionPerformed(evt);
+            }
+        });
+
+        botonEliminar.setText("Eliminar");
+        botonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEliminarActionPerformed(evt);
+            }
+        });
+
+        botonModificar.setText("Modificar");
+        botonModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonModificarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Nuevo registro");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -64,39 +121,94 @@ public class pokeInterfaz extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addContainerGap(437, Short.MAX_VALUE))
+                    .addComponent(etqID)
+                    .addComponent(etqNombre)
+                    .addComponent(etqTipo1)
+                    .addComponent(etqTipo2)
+                    .addComponent(etqAltura)
+                    .addComponent(etqPeso)
+                    .addComponent(etqNaturaleza)
+                    .addComponent(etqDescripcion))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(campoID, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(campoNombre)
+                            .addComponent(campoTipo1)
+                            .addComponent(campoTipo2)
+                            .addComponent(campoAltura)
+                            .addComponent(campoPeso)
+                            .addComponent(campoNaturaleza, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                        .addGap(127, 127, 127)
+                        .addComponent(imgOak, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(campoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(71, 71, 71)
+                                .addComponent(botonModificar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(botonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(botonInsertar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(424, 424, 424)
+                        .addComponent(jButton1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addGap(63, 63, 63)
-                .addComponent(jLabel8)
-                .addContainerGap(166, Short.MAX_VALUE))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqID)
+                            .addComponent(campoID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqNombre)
+                            .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqTipo1)
+                            .addComponent(campoTipo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqTipo2)
+                            .addComponent(campoTipo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqAltura)
+                            .addComponent(campoAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqPeso)
+                            .addComponent(campoPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(etqNaturaleza)
+                            .addComponent(campoNaturaleza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(imgOak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(59, 59, 59)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(etqDescripcion)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(botonInsertar)
+                            .addComponent(jButton1))
+                        .addGap(18, 18, 18)
+                        .addComponent(botonEliminar)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonModificar))
+                    .addComponent(campoDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab1", jPanel2);
+        jTabbedPane1.addTab("Datos", jPanel2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -122,6 +234,90 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void campoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoNombreActionPerformed
+
+    private void botonInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonInsertarActionPerformed
+        Conexion con = new Conexion();
+        java.sql.Connection asd = con.conectar();
+        String id, nom, tip1, tip2, alt, pes, nat, desc;
+        String sql;
+        id=campoID.getText();
+        nom=campoNombre.getText();
+        tip1=campoTipo1.getText();
+        tip2=campoTipo2.getText();
+        alt=campoAltura.getText();
+        pes=campoPeso.getText();
+        nat=campoNaturaleza.getText();
+        desc=campoDescripcion.getText();
+        
+                
+        sql= "INSERT INTO pokemon (Id, Nombre, Tipo1, Tipo2, Altura, Peso, Naturaleza, Descripcion)VALUES (?,?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement pst= asd.prepareStatement(sql);
+            pst.setString(1, id);
+            pst.setString(2, nom);
+            pst.setString(3, tip1);
+            pst.setString(4, tip2);
+            pst.setString(5, alt);
+            pst.setString(6, pes);
+            pst.setString(7, nat);
+            pst.setString(8, desc);
+            int x=pst.executeUpdate();
+            if (x>0)
+                JOptionPane.showMessageDialog(rootPane, "Datos Registrados");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonInsertarActionPerformed
+
+    private void botonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarActionPerformed
+        try {
+            Conexion con = new Conexion();
+            Connection asd = (Connection) con.conectar();
+            
+            
+            String sql= "DELETE FROM pokemon WHERE id="+campoID.getText();
+            state = asd.createStatement();
+            int x= state.executeUpdate(sql);
+                if(x>0)
+                    JOptionPane.showMessageDialog(rootPane, "Datos eliminados");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonEliminarActionPerformed
+
+    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+        try {
+            Conexion con = new Conexion();
+            PreparedStatement asd= con.conectar().prepareStatement("UPDATE pokemon SET Nombre='"+campoNombre.getText()+
+                    "', Tipo1='"+campoTipo1.getText()+ "', Tipo2='" +campoTipo2.getText()+ 
+                    "', Altura='"+campoAltura.getText()+"', Peso='"+campoPeso.getText() +
+                    "', Naturaleza='"+campoNaturaleza.getText()+ "', Descripcion='"+ campoDescripcion.getText()+
+                    "' WHERE id='"+campoID.getText()+"'");
+
+            
+            asd.execute();
+                JOptionPane.showMessageDialog(rootPane, "Registro modificado");
+        } catch (SQLException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonModificarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        campoID.setText("");
+        campoNombre.setText("");
+        campoTipo1.setText("");
+        campoTipo2.setText("");
+        campoAltura.setText("");
+        campoPeso.setText("");
+        campoNaturaleza.setText("");
+        campoDescripcion.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,14 +355,27 @@ public class pokeInterfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JButton botonEliminar;
+    private javax.swing.JButton botonInsertar;
+    private javax.swing.JButton botonModificar;
+    private javax.swing.JTextField campoAltura;
+    private javax.swing.JTextField campoDescripcion;
+    private javax.swing.JTextField campoID;
+    private javax.swing.JTextField campoNaturaleza;
+    private javax.swing.JTextField campoNombre;
+    private javax.swing.JTextField campoPeso;
+    private javax.swing.JTextField campoTipo1;
+    private javax.swing.JTextField campoTipo2;
+    private javax.swing.JLabel etqAltura;
+    private javax.swing.JLabel etqDescripcion;
+    private javax.swing.JLabel etqID;
+    private javax.swing.JLabel etqNaturaleza;
+    private javax.swing.JLabel etqNombre;
+    private javax.swing.JLabel etqPeso;
+    private javax.swing.JLabel etqTipo1;
+    private javax.swing.JLabel etqTipo2;
+    private javax.swing.JLabel imgOak;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
