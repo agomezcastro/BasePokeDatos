@@ -5,6 +5,8 @@
  */
 package pokedexbasedatos;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author agomezcastro
@@ -16,6 +18,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
      */
     public pokeInterfaz() {
         initComponents();
+        this.etqFondo.setIcon(new ImageIcon("/datos/local/mgonzalezlorenzo/NetBeansProjects/BasePokeDatos/src/imgs/Pokedex.png"));
     }
 
     /**
@@ -38,6 +41,8 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        etqFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,7 +77,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(437, Short.MAX_VALUE))
+                .addContainerGap(679, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,10 +98,16 @@ public class pokeInterfaz extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(63, 63, 63)
                 .addComponent(jLabel8)
-                .addContainerGap(166, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab1", jPanel2);
+
+        jPanel3.setLayout(null);
+        jPanel3.add(etqFondo);
+        etqFondo.setBounds(0, 0, 800, 520);
+
+        jTabbedPane1.addTab("tab2", jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,6 +170,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel etqFondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -169,6 +181,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
