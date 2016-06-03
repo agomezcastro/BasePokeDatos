@@ -26,6 +26,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
     public pokeInterfaz() {
         initComponents();
         imgOak.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/oak.png"));
+        imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/lab.jpg"));
     }
 
     /**
@@ -59,32 +60,66 @@ public class pokeInterfaz extends javax.swing.JFrame {
         imgOak = new javax.swing.JLabel();
         botonEliminar = new javax.swing.JButton();
         botonModificar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        campoDescripcion = new javax.swing.JTextField();
+        botonLimpiar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        campoDescripcion = new javax.swing.JTextArea();
+        imgLab = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel2.setLayout(null);
+
         etqID.setText("Id:");
+        jPanel2.add(etqID);
+        etqID.setBounds(47, 45, 18, 15);
 
         etqNombre.setText("Nombre:");
+        jPanel2.add(etqNombre);
+        etqNombre.setBounds(47, 82, 60, 15);
 
         etqTipo1.setText("Tipo1:");
+        jPanel2.add(etqTipo1);
+        etqTipo1.setBounds(47, 119, 43, 15);
 
         etqTipo2.setText("Tipo2:");
+        jPanel2.add(etqTipo2);
+        etqTipo2.setBounds(47, 165, 43, 15);
 
         etqAltura.setText("Altura (metros):");
+        jPanel2.add(etqAltura);
+        etqAltura.setBounds(47, 213, 112, 15);
 
         etqPeso.setText("Peso (kg):");
+        jPanel2.add(etqPeso);
+        etqPeso.setBounds(47, 257, 71, 15);
 
         etqNaturaleza.setText("Naturaleza:");
+        jPanel2.add(etqNaturaleza);
+        etqNaturaleza.setBounds(47, 300, 84, 15);
 
         etqDescripcion.setText("Descripcion:");
+        jPanel2.add(etqDescripcion);
+        etqDescripcion.setBounds(47, 376, 87, 15);
+        jPanel2.add(campoID);
+        campoID.setBounds(189, 43, 70, 19);
 
         campoNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoNombreActionPerformed(evt);
             }
         });
+        jPanel2.add(campoNombre);
+        campoNombre.setBounds(189, 80, 127, 19);
+        jPanel2.add(campoTipo1);
+        campoTipo1.setBounds(189, 117, 127, 19);
+        jPanel2.add(campoTipo2);
+        campoTipo2.setBounds(189, 163, 127, 19);
+        jPanel2.add(campoAltura);
+        campoAltura.setBounds(189, 211, 127, 19);
+        jPanel2.add(campoPeso);
+        campoPeso.setBounds(189, 255, 127, 19);
+        jPanel2.add(campoNaturaleza);
+        campoNaturaleza.setBounds(189, 298, 127, 19);
 
         botonInsertar.setText("Insertar");
         botonInsertar.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +127,10 @@ public class pokeInterfaz extends javax.swing.JFrame {
                 botonInsertarActionPerformed(evt);
             }
         });
+        jPanel2.add(botonInsertar);
+        botonInsertar.setBounds(403, 58, 138, 80);
+        jPanel2.add(imgOak);
+        imgOak.setBounds(508, 348, 208, 139);
 
         botonEliminar.setText("Eliminar");
         botonEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -99,6 +138,8 @@ public class pokeInterfaz extends javax.swing.JFrame {
                 botonEliminarActionPerformed(evt);
             }
         });
+        jPanel2.add(botonEliminar);
+        botonEliminar.setBounds(403, 185, 138, 89);
 
         botonModificar.setText("Modificar");
         botonModificar.addActionListener(new java.awt.event.ActionListener() {
@@ -106,107 +147,26 @@ public class pokeInterfaz extends javax.swing.JFrame {
                 botonModificarActionPerformed(evt);
             }
         });
+        jPanel2.add(botonModificar);
+        botonModificar.setBounds(598, 58, 139, 80);
 
-        jButton1.setText("Nuevo registro");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonLimpiar.setText("Nuevo registro");
+        botonLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonLimpiarActionPerformed(evt);
             }
         });
+        jPanel2.add(botonLimpiar);
+        botonLimpiar.setBounds(598, 185, 139, 89);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqID)
-                    .addComponent(etqNombre)
-                    .addComponent(etqTipo1)
-                    .addComponent(etqTipo2)
-                    .addComponent(etqAltura)
-                    .addComponent(etqPeso)
-                    .addComponent(etqNaturaleza)
-                    .addComponent(etqDescripcion))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(campoID, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoNombre)
-                            .addComponent(campoTipo1)
-                            .addComponent(campoTipo2)
-                            .addComponent(campoAltura)
-                            .addComponent(campoPeso)
-                            .addComponent(campoNaturaleza, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
-                        .addGap(127, 127, 127)
-                        .addComponent(imgOak, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(campoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(71, 71, 71)
-                                .addComponent(botonModificar))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(botonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(botonInsertar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(424, 424, 424)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqID)
-                            .addComponent(campoID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqNombre)
-                            .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqTipo1)
-                            .addComponent(campoTipo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqTipo2)
-                            .addComponent(campoTipo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqAltura)
-                            .addComponent(campoAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqPeso)
-                            .addComponent(campoPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(etqNaturaleza)
-                            .addComponent(campoNaturaleza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(imgOak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(59, 59, 59)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(etqDescripcion)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(botonInsertar)
-                            .addComponent(jButton1))
-                        .addGap(18, 18, 18)
-                        .addComponent(botonEliminar)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonModificar))
-                    .addComponent(campoDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
+        campoDescripcion.setColumns(20);
+        campoDescripcion.setRows(5);
+        jScrollPane1.setViewportView(campoDescripcion);
+
+        jPanel2.add(jScrollPane1);
+        jScrollPane1.setBounds(189, 376, 223, 78);
+        jPanel2.add(imgLab);
+        imgLab.setBounds(2, 2, 800, 530);
 
         jTabbedPane1.addTab("Datos", jPanel2);
 
@@ -308,7 +268,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonModificarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
         campoID.setText("");
         campoNombre.setText("");
         campoTipo1.setText("");
@@ -317,7 +277,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         campoPeso.setText("");
         campoNaturaleza.setText("");
         campoDescripcion.setText("");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botonLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -357,9 +317,10 @@ public class pokeInterfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonEliminar;
     private javax.swing.JButton botonInsertar;
+    private javax.swing.JButton botonLimpiar;
     private javax.swing.JButton botonModificar;
     private javax.swing.JTextField campoAltura;
-    private javax.swing.JTextField campoDescripcion;
+    private javax.swing.JTextArea campoDescripcion;
     private javax.swing.JTextField campoID;
     private javax.swing.JTextField campoNaturaleza;
     private javax.swing.JTextField campoNombre;
@@ -374,10 +335,11 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JLabel etqPeso;
     private javax.swing.JLabel etqTipo1;
     private javax.swing.JLabel etqTipo2;
+    private javax.swing.JLabel imgLab;
     private javax.swing.JLabel imgOak;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
