@@ -7,6 +7,7 @@ package pokedexbasedatos;
 
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -25,10 +26,28 @@ public class pokeInterfaz extends javax.swing.JFrame {
      */
     public pokeInterfaz() {
         initComponents();
+        BActualizar.setOpaque(false);
+        BActualizar.setContentAreaFilled(false);
+        BActualizar.setBorderPainted(false);
         imgOak.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/oak.png"));
         imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/lab.jpg"));
+        etqFondo.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/Pokedex.png"));
+        cargarCmb();
     }
 
+    public void cargarCmb(){
+        try {
+            Conexion con = new Conexion();
+            Statement st;
+            st = con.conectar().createStatement();
+            ResultSet rs = st.executeQuery("select id, nombre from pokemon");
+            while(rs.next()){
+                cmbPok.addItem(rs.getString("Nombre"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -64,6 +83,17 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         campoDescripcion = new javax.swing.JTextArea();
         imgLab = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        cmbPok = new javax.swing.JComboBox();
+        BVisualizar = new javax.swing.JButton();
+        BActualizar = new javax.swing.JButton();
+        etqVis = new javax.swing.JLabel();
+        etqTip1 = new javax.swing.JLabel();
+        etqTip2 = new javax.swing.JLabel();
+        etqImgPok = new javax.swing.JLabel();
+        etqFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,7 +131,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jPanel2.add(etqDescripcion);
         etqDescripcion.setBounds(47, 376, 87, 15);
         jPanel2.add(campoID);
-        campoID.setBounds(189, 43, 70, 19);
+        campoID.setBounds(189, 43, 100, 30);
 
         campoNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,17 +139,17 @@ public class pokeInterfaz extends javax.swing.JFrame {
             }
         });
         jPanel2.add(campoNombre);
-        campoNombre.setBounds(189, 80, 127, 19);
+        campoNombre.setBounds(189, 80, 127, 30);
         jPanel2.add(campoTipo1);
-        campoTipo1.setBounds(189, 117, 127, 19);
+        campoTipo1.setBounds(189, 117, 127, 30);
         jPanel2.add(campoTipo2);
-        campoTipo2.setBounds(189, 163, 127, 19);
+        campoTipo2.setBounds(189, 163, 127, 30);
         jPanel2.add(campoAltura);
-        campoAltura.setBounds(189, 211, 127, 19);
+        campoAltura.setBounds(189, 211, 127, 30);
         jPanel2.add(campoPeso);
-        campoPeso.setBounds(189, 255, 127, 19);
+        campoPeso.setBounds(189, 255, 127, 30);
         jPanel2.add(campoNaturaleza);
-        campoNaturaleza.setBounds(189, 298, 127, 19);
+        campoNaturaleza.setBounds(189, 298, 127, 40);
 
         botonInsertar.setText("Insertar");
         botonInsertar.addActionListener(new java.awt.event.ActionListener() {
@@ -170,15 +200,66 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Datos", jPanel2);
 
+        jPanel3.setLayout(null);
+
+        jTextArea1.setBackground(new java.awt.Color(51, 255, 51));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        jPanel3.add(jScrollPane2);
+        jScrollPane2.setBounds(480, 250, 270, 180);
+
+        cmbPok.setBackground(new java.awt.Color(51, 255, 51));
+        cmbPok.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel3.add(cmbPok);
+        cmbPok.setBounds(470, 150, 190, 24);
+
+        BVisualizar.setBackground(new java.awt.Color(51, 255, 51));
+        BVisualizar.setForeground(new java.awt.Color(0, 0, 0));
+        BVisualizar.setText("Ver");
+        BVisualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BVisualizarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(BVisualizar);
+        BVisualizar.setBounds(680, 150, 70, 25);
+
+        BActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Refresh.png"))); // NOI18N
+        BActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BActualizarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(BActualizar);
+        BActualizar.setBounds(270, 10, 40, 50);
+
+        etqVis.setFont(new java.awt.Font("Liberation Serif", 1, 16)); // NOI18N
+        etqVis.setForeground(new java.awt.Color(255, 255, 255));
+        etqVis.setText("Elige el pokemon que quieres ver");
+        jPanel3.add(etqVis);
+        etqVis.setBounds(470, 100, 270, 50);
+        jPanel3.add(etqTip1);
+        etqTip1.setBounds(500, 200, 110, 30);
+        jPanel3.add(etqTip2);
+        etqTip2.setBounds(670, 200, 90, 30);
+        jPanel3.add(etqImgPok);
+        etqImgPok.setBounds(80, 100, 270, 340);
+        jPanel3.add(etqFondo);
+        etqFondo.setBounds(0, 0, 800, 510);
+
+        jTabbedPane1.addTab("Pokedex", jPanel3);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -279,6 +360,31 @@ public class pokeInterfaz extends javax.swing.JFrame {
         campoDescripcion.setText("");
     }//GEN-LAST:event_botonLimpiarActionPerformed
 
+    private void BVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BVisualizarActionPerformed
+        etqImgPok.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+cmbPok.getSelectedItem()+".jpg"));
+        
+        Conexion con = new Conexion();
+        Statement st;
+        try {
+            st = con.conectar().createStatement();
+            ResultSet rs = st.executeQuery("select tipo1, tipo2, descripcion from pokemon where nombre='"+cmbPok.getSelectedItem()+"'");
+            while(rs.next()){
+                jTextArea1.setText(rs.getString("Descripcion"));
+                etqTip1.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo1")+".gif"));
+                if(rs.getString("Tipo2")!=""){
+                    etqTip2.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo2")+".gif"));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BVisualizarActionPerformed
+
+    private void BActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarActionPerformed
+        cmbPok.removeAllItems();
+        cargarCmb();
+    }//GEN-LAST:event_BActualizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -315,6 +421,8 @@ public class pokeInterfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BActualizar;
+    private javax.swing.JButton BVisualizar;
     private javax.swing.JButton botonEliminar;
     private javax.swing.JButton botonInsertar;
     private javax.swing.JButton botonLimpiar;
@@ -327,19 +435,28 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JTextField campoPeso;
     private javax.swing.JTextField campoTipo1;
     private javax.swing.JTextField campoTipo2;
+    private javax.swing.JComboBox cmbPok;
     private javax.swing.JLabel etqAltura;
     private javax.swing.JLabel etqDescripcion;
+    private javax.swing.JLabel etqFondo;
     private javax.swing.JLabel etqID;
+    private javax.swing.JLabel etqImgPok;
     private javax.swing.JLabel etqNaturaleza;
     private javax.swing.JLabel etqNombre;
     private javax.swing.JLabel etqPeso;
+    private javax.swing.JLabel etqTip1;
+    private javax.swing.JLabel etqTip2;
     private javax.swing.JLabel etqTipo1;
     private javax.swing.JLabel etqTipo2;
+    private javax.swing.JLabel etqVis;
     private javax.swing.JLabel imgLab;
     private javax.swing.JLabel imgOak;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
