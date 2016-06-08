@@ -29,8 +29,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         BActualizar.setOpaque(false);
         BActualizar.setContentAreaFilled(false);
         BActualizar.setBorderPainted(false);
-        imgOak.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/oak.png"));
-        imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/lab.jpg"));
+        imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/pokelab.jpg"));
         etqFondo.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/Pokedex.png"));
         cargarCmb();
     }
@@ -75,8 +74,11 @@ public class pokeInterfaz extends javax.swing.JFrame {
         campoAltura = new javax.swing.JTextField();
         campoPeso = new javax.swing.JTextField();
         campoNaturaleza = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         botonInsertar = new javax.swing.JButton();
-        imgOak = new javax.swing.JLabel();
         botonEliminar = new javax.swing.JButton();
         botonModificar = new javax.swing.JButton();
         botonLimpiar = new javax.swing.JButton();
@@ -151,43 +153,57 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jPanel2.add(campoNaturaleza);
         campoNaturaleza.setBounds(189, 298, 127, 40);
 
-        botonInsertar.setText("Insertar");
+        jLabel4.setText("Limpiar");
+        jPanel2.add(jLabel4);
+        jLabel4.setBounds(640, 260, 60, 15);
+
+        jLabel3.setText("Eliminar");
+        jPanel2.add(jLabel3);
+        jLabel3.setBounds(470, 260, 70, 15);
+
+        jLabel2.setText("Modificar");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(630, 130, 70, 15);
+
+        jLabel1.setText("Insertar");
+        jPanel2.add(jLabel1);
+        jLabel1.setBounds(470, 130, 60, 15);
+
+        botonInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Pokeball.png"))); // NOI18N
         botonInsertar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonInsertarActionPerformed(evt);
             }
         });
         jPanel2.add(botonInsertar);
-        botonInsertar.setBounds(403, 58, 138, 80);
-        jPanel2.add(imgOak);
-        imgOak.setBounds(508, 348, 208, 139);
+        botonInsertar.setBounds(440, 60, 110, 89);
 
-        botonEliminar.setText("Eliminar");
+        botonEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Pokeball.png"))); // NOI18N
         botonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonEliminarActionPerformed(evt);
             }
         });
         jPanel2.add(botonEliminar);
-        botonEliminar.setBounds(403, 185, 138, 89);
+        botonEliminar.setBounds(440, 190, 110, 89);
 
-        botonModificar.setText("Modificar");
+        botonModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Pokeball.png"))); // NOI18N
         botonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonModificarActionPerformed(evt);
             }
         });
         jPanel2.add(botonModificar);
-        botonModificar.setBounds(598, 58, 139, 80);
+        botonModificar.setBounds(610, 60, 110, 89);
 
-        botonLimpiar.setText("Nuevo registro");
+        botonLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Pokeball.png"))); // NOI18N
         botonLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonLimpiarActionPerformed(evt);
             }
         });
         jPanel2.add(botonLimpiar);
-        botonLimpiar.setBounds(598, 185, 139, 89);
+        botonLimpiar.setBounds(610, 190, 110, 89);
 
         campoDescripcion.setColumns(20);
         campoDescripcion.setRows(5);
@@ -450,7 +466,10 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JLabel etqTipo2;
     private javax.swing.JLabel etqVis;
     private javax.swing.JLabel imgLab;
-    private javax.swing.JLabel imgOak;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
