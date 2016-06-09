@@ -6,12 +6,19 @@
 package pokedexbasedatos;
 
 import com.mysql.jdbc.Connection;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -26,9 +33,14 @@ public class pokeInterfaz extends javax.swing.JFrame {
      */
     public pokeInterfaz() {
         initComponents();
+        PokeSonido sonido = new PokeSonido();
+        sonido.music();
         BActualizar.setOpaque(false);
         BActualizar.setContentAreaFilled(false);
         BActualizar.setBorderPainted(false);
+        BGrito.setOpaque(false);
+        BGrito.setContentAreaFilled(false);
+        BGrito.setBorderPainted(false);
         imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/pokelab.jpg"));
         etqFondo.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/Pokedex.png"));
         cargarCmb();
@@ -89,8 +101,11 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         cmbPok = new javax.swing.JComboBox();
+        BGrito = new javax.swing.JButton();
         BVisualizar = new javax.swing.JButton();
         BActualizar = new javax.swing.JButton();
+        etqAltura2 = new javax.swing.JLabel();
+        etqPeso2 = new javax.swing.JLabel();
         etqVis = new javax.swing.JLabel();
         etqTip1 = new javax.swing.JLabel();
         etqTip2 = new javax.swing.JLabel();
@@ -231,6 +246,15 @@ public class pokeInterfaz extends javax.swing.JFrame {
         jPanel3.add(cmbPok);
         cmbPok.setBounds(470, 150, 190, 24);
 
+        BGrito.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BGrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BGritoActionPerformed(evt);
+            }
+        });
+        jPanel3.add(BGrito);
+        BGrito.setBounds(50, 450, 50, 30);
+
         BVisualizar.setBackground(new java.awt.Color(51, 255, 51));
         BVisualizar.setForeground(new java.awt.Color(0, 0, 0));
         BVisualizar.setText("Ver");
@@ -250,6 +274,10 @@ public class pokeInterfaz extends javax.swing.JFrame {
         });
         jPanel3.add(BActualizar);
         BActualizar.setBounds(270, 10, 40, 50);
+        jPanel3.add(etqAltura2);
+        etqAltura2.setBounds(660, 450, 100, 30);
+        jPanel3.add(etqPeso2);
+        etqPeso2.setBounds(490, 450, 150, 30);
 
         etqVis.setFont(new java.awt.Font("Liberation Serif", 1, 16)); // NOI18N
         etqVis.setForeground(new java.awt.Color(255, 255, 255));
@@ -383,13 +411,15 @@ public class pokeInterfaz extends javax.swing.JFrame {
         Statement st;
         try {
             st = con.conectar().createStatement();
-            ResultSet rs = st.executeQuery("select tipo1, tipo2, descripcion from pokemon where nombre='"+cmbPok.getSelectedItem()+"'");
+            ResultSet rs = st.executeQuery("select tipo1, tipo2, descripcion, altura, peso from pokemon where nombre='"+cmbPok.getSelectedItem()+"'");
             while(rs.next()){
                 jTextArea1.setText(rs.getString("Descripcion"));
                 etqTip1.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo1")+".gif"));
                 if(rs.getString("Tipo2")!=""){
                     etqTip2.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo2")+".gif"));
                 }
+                etqAltura2.setText("Altura: "+rs.getString("altura")+" m");
+                etqPeso2.setText("Peso: "+rs.getString("peso")+" kg");
             }
         } catch (SQLException ex) {
             Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
@@ -400,6 +430,21 @@ public class pokeInterfaz extends javax.swing.JFrame {
         cmbPok.removeAllItems();
         cargarCmb();
     }//GEN-LAST:event_BActualizarActionPerformed
+
+    private void BGritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGritoActionPerformed
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/Sonidos/" + cmbPok.getSelectedItem()+".wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BGritoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,6 +483,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BActualizar;
+    private javax.swing.JButton BGrito;
     private javax.swing.JButton BVisualizar;
     private javax.swing.JButton botonEliminar;
     private javax.swing.JButton botonInsertar;
@@ -453,6 +499,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JTextField campoTipo2;
     private javax.swing.JComboBox cmbPok;
     private javax.swing.JLabel etqAltura;
+    private javax.swing.JLabel etqAltura2;
     private javax.swing.JLabel etqDescripcion;
     private javax.swing.JLabel etqFondo;
     private javax.swing.JLabel etqID;
@@ -460,6 +507,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JLabel etqNaturaleza;
     private javax.swing.JLabel etqNombre;
     private javax.swing.JLabel etqPeso;
+    private javax.swing.JLabel etqPeso2;
     private javax.swing.JLabel etqTip1;
     private javax.swing.JLabel etqTip2;
     private javax.swing.JLabel etqTipo1;
