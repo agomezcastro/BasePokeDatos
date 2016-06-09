@@ -116,37 +116,37 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
         jPanel2.setLayout(null);
 
-        etqID.setText("Id:");
+        etqID.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/id.png"))); // NOI18N
         jPanel2.add(etqID);
-        etqID.setBounds(47, 45, 18, 15);
+        etqID.setBounds(100, 40, 50, 20);
 
-        etqNombre.setText("Nombre:");
+        etqNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/nombre.png"))); // NOI18N
         jPanel2.add(etqNombre);
-        etqNombre.setBounds(47, 82, 60, 15);
+        etqNombre.setBounds(30, 70, 123, 40);
 
-        etqTipo1.setText("Tipo1:");
+        etqTipo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tipo1.png"))); // NOI18N
         jPanel2.add(etqTipo1);
-        etqTipo1.setBounds(47, 119, 43, 15);
+        etqTipo1.setBounds(60, 120, 90, 30);
 
-        etqTipo2.setText("Tipo2:");
+        etqTipo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tipo2.png"))); // NOI18N
         jPanel2.add(etqTipo2);
-        etqTipo2.setBounds(47, 165, 43, 15);
+        etqTipo2.setBounds(60, 160, 90, 30);
 
-        etqAltura.setText("Altura (metros):");
+        etqAltura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/altura.png"))); // NOI18N
         jPanel2.add(etqAltura);
-        etqAltura.setBounds(47, 213, 112, 15);
+        etqAltura.setBounds(20, 200, 160, 40);
 
-        etqPeso.setText("Peso (kg):");
+        etqPeso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/peso.png"))); // NOI18N
         jPanel2.add(etqPeso);
-        etqPeso.setBounds(47, 257, 71, 15);
+        etqPeso.setBounds(30, 250, 150, 40);
 
-        etqNaturaleza.setText("Naturaleza:");
+        etqNaturaleza.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/naturaleza.png"))); // NOI18N
         jPanel2.add(etqNaturaleza);
-        etqNaturaleza.setBounds(47, 300, 84, 15);
+        etqNaturaleza.setBounds(10, 300, 170, 40);
 
-        etqDescripcion.setText("Descripcion:");
+        etqDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/descripcion.png"))); // NOI18N
         jPanel2.add(etqDescripcion);
-        etqDescripcion.setBounds(47, 376, 87, 15);
+        etqDescripcion.setBounds(10, 370, 180, 50);
         jPanel2.add(campoID);
         campoID.setBounds(189, 43, 100, 30);
 
@@ -267,6 +267,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         BVisualizar.setBounds(680, 150, 70, 25);
 
         BActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Refresh.png"))); // NOI18N
+        BActualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BActualizarActionPerformed(evt);
@@ -281,9 +282,9 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
         etqVis.setFont(new java.awt.Font("Liberation Serif", 1, 16)); // NOI18N
         etqVis.setForeground(new java.awt.Color(255, 255, 255));
-        etqVis.setText("Elige el pokemon que quieres ver");
+        etqVis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/verpokemon.png"))); // NOI18N
         jPanel3.add(etqVis);
-        etqVis.setBounds(470, 100, 270, 50);
+        etqVis.setBounds(470, 100, 280, 50);
         jPanel3.add(etqTip1);
         etqTip1.setBounds(500, 200, 110, 30);
         jPanel3.add(etqTip2);
@@ -433,7 +434,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
 
     private void BGritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGritoActionPerformed
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/Sonidos/" + cmbPok.getSelectedItem()+".wav").getAbsoluteFile());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Sonidos/" + cmbPok.getSelectedItem()+".wav").getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
