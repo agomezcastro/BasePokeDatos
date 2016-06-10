@@ -20,7 +20,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class PokeSonido {
     public void music(){
         try {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/Sonidos/LabMusic.wav").getAbsoluteFile());
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Sonidos/LabMusicMod.wav").getAbsoluteFile());
         Clip clip = AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
