@@ -5,29 +5,38 @@
  */
 package pokedexbasedatos;
 
-import com.mysql.jdbc.Connection;
+import jdk.nashorn.internal.scripts.JO;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
- *
  * @author agomezcastro
  */
-public class pokeInterfaz extends javax.swing.JFrame {
+public class pokeInterfaz extends javax.swing.JFrame implements KeyListener {
     private Statement state;
+
+    HttpURLConnection connection;
+    String readLine = null;
+    StringBuffer response;
+    BufferedReader in;
+
     /**
      * Creates new form pokeInterfaz
      */
@@ -35,30 +44,230 @@ public class pokeInterfaz extends javax.swing.JFrame {
         initComponents();
         PokeSonido sonido = new PokeSonido();
         sonido.music();
+        campoID.addKeyListener((KeyListener) this);
         BActualizar.setOpaque(false);
         BActualizar.setContentAreaFilled(false);
         BActualizar.setBorderPainted(false);
         BGrito.setOpaque(false);
         BGrito.setContentAreaFilled(false);
         BGrito.setBorderPainted(false);
-        imgLab.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/pokelab.jpg"));
-        etqFondo.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/Pokedex.png"));
-        cargarCmb();
+        campoID.isFocusable();
+        imgLab.setIcon(new ImageIcon("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Imagenes\\pokelab.jpg"));
+        etqFondo.setIcon(new ImageIcon("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Imagenes\\Pokedex.png"));
+        try {
+            pokeLista();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void cargarCmb(){
+    public void conectarPokeAPI(String query_url) throws IOException {
+        URL getUrl = new URL(query_url);
+        connection = (HttpURLConnection) getUrl.openConnection();
         try {
-            Conexion con = new Conexion();
-            Statement st;
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.addRequestProperty("User-Agent", "");
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                System.out.println("Error al conectar con la API");
+            } else {
+                in = new BufferedReader((new InputStreamReader(connection.getInputStream())));
+                response = new StringBuffer();
+                while ((readLine = in.readLine()) != null) {
+                    response.append(readLine);
+                }
+                in.close();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //mostar la lista de pokemon en el combobox
+    public void pokeLista() throws IOException, SQLException {
+        String sql = "SELECT * FROM pokemon";
+        String nombre;
+        cmbPok.removeAllItems();
+
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            nombre = rs.getString("nombre");
+            cmbPok.addItem(nombre);
+        }
+        /*String query_url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=807";
+        conectarPokeAPI(query_url);
+
+        //recorro el json del request que hice a la API
+        JSONObject json = new JSONObject(response.toString());
+        JSONArray arrayJson = json.getJSONArray("results");
+
+        //recorro el array del json "results" y muestro los nombres de los pokemon
+        for (int i = 0; i < arrayJson.length(); i++) {
+            json = arrayJson.getJSONObject(i);
+            cmbPok.addItem(json.getString("name"));
+        }*/
+    }
+
+    public void actualizarBaseDatos() throws SQLException, IOException {
+        String sql = "SELECT * FROM pokemon";
+        ArrayList<String> nombreBase = new ArrayList<>();
+
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            nombreBase.add(rs.getString("nombre"));
+        }
+
+        String query_url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=807";
+        conectarPokeAPI(query_url);
+
+        ////muestro los nombres de los pokemon
+        JSONObject json = new JSONObject(response.toString());
+        JSONArray arrayJson = json.getJSONArray("results");
+
+        //comparo cuantos resultados hay en la base y en la API
+        if (nombreBase.size() < arrayJson.length()) {
+            JOptionPane.showMessageDialog(rootPane, "Hay nuevos pokemon disponibles, se añadirán " +
+                    "a la base de datos");
+            for (int i = 0; i < arrayJson.length(); i++) {
+                json = arrayJson.getJSONObject(i);
+                String pokeNombre = json.getString("name");
+
+                if (!nombreBase.contains(pokeNombre) || nombreBase.isEmpty()) {
+                    query_url = "https://pokeapi.co/api/v2/pokemon/" + pokeNombre;
+                    conectarPokeAPI(query_url);
+
+                    //Recojo el id del pokemon
+                    JSONObject id = new JSONObject(response.toString());
+                    int pokeId = id.getInt(("id"));
+
+                    //muestro la altura y el peso
+                    JSONObject medidas = new JSONObject(response.toString());
+                    int height = medidas.getInt("height");
+                    int weight = medidas.getInt("weight");
+
+                    //muestro la descripcion
+                    String pokeBio = null;
+                    JSONObject desc = new JSONObject(response.toString());
+                    desc = desc.getJSONObject("species");
+                    String requestDesc = desc.getString("url");
+                    conectarPokeAPI(requestDesc);
+                    JSONObject pokeDesc = new JSONObject(response.toString());
+                    JSONArray arrayDesc = pokeDesc.getJSONArray("flavor_text_entries");
+
+                    for (int y = 0; y < arrayDesc.length(); y++) {
+                        pokeDesc = arrayDesc.getJSONObject(y);
+                        JSONObject lang = pokeDesc.getJSONObject("language");
+                        String idioma = lang.getString("name");
+                        if (idioma.equals("es")) {
+                            pokeBio = pokeDesc.getString("flavor_text");
+                            break;
+                        }
+                    }
+
+                    //muestro los tipos del pokemon
+                    //String pokeTipo = null;
+                    String tipo1 = null;
+                    String tipo2 = null;
+                    conectarPokeAPI(query_url);
+                    JSONObject tipos = new JSONObject(response.toString());
+                    JSONArray arrayTipos = tipos.getJSONArray("types");
+
+                    for (int x = 0; x < arrayTipos.length(); x++) {
+                        tipos = arrayTipos.getJSONObject(x);
+                        int slot = tipos.getInt("slot");
+                        tipos = tipos.getJSONObject("type");
+                        String tipoIdioma = tipos.getString("url");
+
+                        if (slot == 1) {
+                            conectarPokeAPI(tipoIdioma);
+                            JSONObject jsonTipoIdioma = new JSONObject(response.toString());
+                            JSONArray arrayTipoIdioma = jsonTipoIdioma.getJSONArray("names");
+                            for (int j = 0; j < arrayTipoIdioma.length(); j++) {
+                                jsonTipoIdioma = arrayTipoIdioma.getJSONObject(j);
+                                JSONObject idioma = jsonTipoIdioma.getJSONObject("language");
+                                String español = idioma.getString("name");
+                                if (español.equals("es")) {
+                                    String idiomaEsp = jsonTipoIdioma.getString("name");
+                                    tipo1 = idiomaEsp;
+                                }
+                            }
+                        } else {
+                            conectarPokeAPI(tipoIdioma);
+                            JSONObject jsonTipoIdioma = new JSONObject(response.toString());
+                            JSONArray arrayTipoIdioma = jsonTipoIdioma.getJSONArray("names");
+                            for (int j = 0; j < arrayTipoIdioma.length(); j++) {
+                                jsonTipoIdioma = arrayTipoIdioma.getJSONObject(j);
+                                JSONObject idioma = jsonTipoIdioma.getJSONObject("language");
+                                String español = idioma.getString("name");
+                                if (español.equals("es")) {
+                                    String idiomaEsp = jsonTipoIdioma.getString("name");
+                                    tipo2 = idiomaEsp;
+                                }
+                            }
+                        }
+                    }
+
+                    sql = "INSERT INTO pokemon (id, nombre, tipo1, tipo2, altura, peso, naturaleza, descripcion, image)" +
+                            "VALUES (?,?,?,?,?,?,?,?,?)";
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.setInt(1, pokeId);
+                    pst.setString(2, pokeNombre);
+                    pst.setString(3, tipo1);
+                    pst.setString(4, tipo2);
+                    pst.setInt(5, height);
+                    pst.setInt(6, weight);
+                    pst.setString(7, null);
+                    pst.setString(8, pokeBio);
+                    pst.setString(9, pokeId + ".png");
+                    pst.executeUpdate();
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "No hay Pokemon nuevos");
+        }
+    }
+
+    //mostrar todos los datos del pokemon
+    public void mostrarPokemon() throws IOException {
+        Conexion con = new Conexion();
+        Statement st;
+        try {
             st = con.conectar().createStatement();
-            ResultSet rs = st.executeQuery("select id, nombre from pokemon");
-            while(rs.next()){
-                cmbPok.addItem(rs.getString("Nombre"));
+            ResultSet rs = st.executeQuery("select tipo1, tipo2, descripcion, altura, peso, image from pokemon where nombre='" + cmbPok.getSelectedItem() + "'");
+            while (rs.next()) {
+                jTextArea1.setText(rs.getString("Descripcion"));
+                etqTip1.setIcon(new ImageIcon("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Imagenes\\Tipos\\" + rs.getString("Tipo1") + ".gif"));
+                if (rs.getString("Tipo2") != "") {
+                    etqTip2.setIcon(new ImageIcon("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Imagenes\\Tipos\\" + rs.getString("Tipo2") + ".gif"));
+                }
+                float altura = rs.getInt("altura");
+                float peso = rs.getInt("peso");
+                float alt = altura / 10;
+                float pes = peso / 10;
+                etqAltura2.setText("Altura: " + alt + " m");
+                etqPeso2.setText("Peso: " + pes + " kg");
+                etqImgPok.setIcon(new ImageIcon(new ImageIcon("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Imagenes\\pokemonImg\\"
+                        + rs.getString("image")).getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT)));
+                etqImgPok.setLocation(50, 100);
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -299,23 +508,23 @@ public class pokeInterfaz extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -330,33 +539,67 @@ public class pokeInterfaz extends javax.swing.JFrame {
         java.sql.Connection asd = con.conectar();
         String id, nom, tip1, tip2, alt, pes, nat, desc;
         String sql;
-        id=campoID.getText();
-        nom=campoNombre.getText();
-        tip1=campoTipo1.getText();
-        tip2=campoTipo2.getText();
-        alt=campoAltura.getText();
-        pes=campoPeso.getText();
-        nat=campoNaturaleza.getText();
-        desc=campoDescripcion.getText();
-        
-                
-        sql= "INSERT INTO pokemon (Id, Nombre, Tipo1, Tipo2, Altura, Peso, Naturaleza, Descripcion)VALUES (?,?,?,?,?,?,?,?)";
+        id = campoID.getText();
+        nom = campoNombre.getText();
+        tip1 = campoTipo1.getText();
+        tip2 = campoTipo2.getText();
+        alt = campoAltura.getText();
+        pes = campoPeso.getText();
+        nat = campoNaturaleza.getText();
+        desc = campoDescripcion.getText();
+
+        sql = "SELECT * FROM pokemon";
+        ArrayList<String> nombres = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
+        cmbPok.removeAllItems();
+
+        Conexion conexion = new Conexion();
+        Connection conn = conexion.conectar();
         try {
-            PreparedStatement pst= asd.prepareStatement(sql);
-            pst.setString(1, id);
-            pst.setString(2, nom);
-            pst.setString(3, tip1);
-            pst.setString(4, tip2);
-            pst.setString(5, alt);
-            pst.setString(6, pes);
-            pst.setString(7, nat);
-            pst.setString(8, desc);
-            int x=pst.executeUpdate();
-            if (x>0)
-                JOptionPane.showMessageDialog(rootPane, "Datos Registrados");
-            
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                nombres.add(rs.getString("nombre"));
+                ids.add(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        sql = "INSERT INTO pokemon (Id, Nombre, Tipo1, Tipo2, Altura, Peso, Naturaleza, Descripcion, image) " +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
+
+        try {
+            if (id.equals("") || nom.equals("") || tip1.equals("") || tip2.equals("") || alt.equals("") ||
+                    pes.equals("") || desc.equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Por favor rellene todos los campos");
+            } else if (nombres.contains(nom) || ids.contains(id)) {
+                JOptionPane.showMessageDialog(rootPane, "Ese nombre/id ya existe, elige otro");
+            } else {
+                PreparedStatement pst = asd.prepareStatement(sql);
+                pst.setString(1, id);
+                pst.setString(2, nom);
+                pst.setString(3, tip1);
+                pst.setString(4, tip2);
+                pst.setString(5, alt);
+                pst.setString(6, pes);
+                pst.setString(7, nat);
+                pst.setString(8, desc);
+                pst.setString(9, id + ".png");
+                int x = pst.executeUpdate();
+                if (x > 0)
+                    JOptionPane.showMessageDialog(rootPane, "Datos Registrados");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            pokeLista();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_botonInsertarActionPerformed
 
@@ -364,37 +607,66 @@ public class pokeInterfaz extends javax.swing.JFrame {
         try {
             Conexion con = new Conexion();
             Connection asd = (Connection) con.conectar();
-            
-            
-            String sql= "DELETE FROM pokemon WHERE id="+campoID.getText();
-            state = asd.createStatement();
-            int x= state.executeUpdate(sql);
-                if(x>0)
+
+            if (campoID.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "El campo ID no puede estar vacio");
+            } else {
+                String sql = "DELETE FROM pokemon WHERE id=" + campoID.getText();
+                state = asd.createStatement();
+                int x = state.executeUpdate(sql);
+                if (x > 0)
                     JOptionPane.showMessageDialog(rootPane, "Datos eliminados");
-            
+            }
+            try {
+                pokeLista();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_botonEliminarActionPerformed
 
     private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+        String id, nom, tip1, tip2, alt, pes, nat, desc;
+        id = campoID.getText();
+        nom = campoNombre.getText();
+        tip1 = campoTipo1.getText();
+        tip2 = campoTipo2.getText();
+        alt = campoAltura.getText();
+        pes = campoPeso.getText();
+        nat = campoNaturaleza.getText();
+        desc = campoDescripcion.getText();
+
         try {
             Conexion con = new Conexion();
-            PreparedStatement asd= con.conectar().prepareStatement("UPDATE pokemon SET Nombre='"+campoNombre.getText()+
-                    "', Tipo1='"+campoTipo1.getText()+ "', Tipo2='" +campoTipo2.getText()+ 
-                    "', Altura='"+campoAltura.getText()+"', Peso='"+campoPeso.getText() +
-                    "', Naturaleza='"+campoNaturaleza.getText()+ "', Descripcion='"+ campoDescripcion.getText()+
-                    "' WHERE id='"+campoID.getText()+"'");
+            if (id.equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "El campo ID no puede estar vacio");
+            } else if (nom.equals("") || tip1.equals("") || tip2.equals("") || alt.equals("") || pes.equals("") ||
+                    desc.equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Por favor rellene todos los campos");
+            } else {
+                PreparedStatement asd = con.conectar().prepareStatement("UPDATE pokemon SET Nombre='" + nom +
+                        "', Tipo1='" + tip1 + "', Tipo2='" + tip2 + "', Altura='" + alt + "', Peso='" + pes +
+                        "', Naturaleza='" + nat + "', Descripcion='" + desc + "', image='" + id + ".png' WHERE id='" + id + "'");
 
-            
-            asd.execute();
+                asd.execute();
                 JOptionPane.showMessageDialog(rootPane, "Registro modificado");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_botonModificarActionPerformed
 
     private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
+        limpiar();
+    }//GEN-LAST:event_botonLimpiarActionPerformed
+
+    private void limpiar() {
         campoID.setText("");
         campoNombre.setText("");
         campoTipo1.setText("");
@@ -403,38 +675,44 @@ public class pokeInterfaz extends javax.swing.JFrame {
         campoPeso.setText("");
         campoNaturaleza.setText("");
         campoDescripcion.setText("");
-    }//GEN-LAST:event_botonLimpiarActionPerformed
+    }
 
     private void BVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BVisualizarActionPerformed
-        etqImgPok.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+cmbPok.getSelectedItem()+".jpg"));
-        
-        Conexion con = new Conexion();
-        Statement st;
         try {
-            st = con.conectar().createStatement();
-            ResultSet rs = st.executeQuery("select tipo1, tipo2, descripcion, altura, peso from pokemon where nombre='"+cmbPok.getSelectedItem()+"'");
-            while(rs.next()){
-                jTextArea1.setText(rs.getString("Descripcion"));
-                etqTip1.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo1")+".gif"));
-                if(rs.getString("Tipo2")!=""){
-                    etqTip2.setIcon(new ImageIcon("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Imagenes/"+rs.getString("Tipo2")+".gif"));
-                }
-                etqAltura2.setText("Altura: "+rs.getString("altura")+" m");
-                etqPeso2.setText("Peso: "+rs.getString("peso")+" kg");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(pokeInterfaz.class.getName()).log(Level.SEVERE, null, ex);
+            mostrarPokemon();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_BVisualizarActionPerformed
 
     private void BActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarActionPerformed
-        cmbPok.removeAllItems();
-        cargarCmb();
+        try {
+            actualizarBaseDatos();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pokeLista();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_BActualizarActionPerformed
 
     private void BGritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGritoActionPerformed
+        String query_url = "https://pokeapi.co/api/v2/pokemon/" + cmbPok.getSelectedItem();
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Sonidos/" + cmbPok.getSelectedItem()+".wav").getAbsoluteFile());
+            conectarPokeAPI(query_url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject id = new JSONObject(response.toString());
+        int pokeId = id.getInt(("id"));
+
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Sonidos\\" + pokeId + cmbPok.getSelectedItem() + ".wav").getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -454,7 +732,7 @@ public class pokeInterfaz extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -526,5 +804,54 @@ public class pokeInterfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String id;
+        id = campoID.getText();
+        try {
+            if (id.equals("")) {
+                campoNombre.setEditable(true);
+                limpiar();
+            } else {
+                Conexion con = new Conexion();
+                String sql = "SELECT * FROM pokemon WHERE id=" + id;
+                Statement st = con.conectar().createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    String nombre = rs.getString("nombre");
+                    String tipo1 = rs.getString("tipo1");
+                    String tipo2 = rs.getString("tipo2");
+                    String altura = rs.getString("altura");
+                    String peso = rs.getString("peso");
+                    String naturaleza = rs.getString("naturaleza");
+                    String desc = rs.getString("descripcion");
+
+                    campoNombre.setText(nombre);
+                    campoTipo1.setText(tipo1);
+                    campoTipo2.setText(tipo2);
+                    campoAltura.setText(altura);
+                    campoPeso.setText(peso);
+                    campoNaturaleza.setText(naturaleza);
+                    campoDescripcion.setText(desc);
+
+                    campoNombre.setEditable(false);
+                }
+            }
+        } catch (SQLException x) {
+            x.printStackTrace();
+        }
+
+    }
     // End of variables declaration//GEN-END:variables
 }

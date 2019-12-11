@@ -14,18 +14,18 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- *
- * @author usuario
+ * @author agomezcastro
  */
 public class PokeSonido {
-    public void music(){
-        try {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/home/local/DANIELCASTELAO/agomezcastro/NetBeansProjects/PokedexBaseDatos/src/Sonidos/LabMusicMod.wav").getAbsoluteFile());
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-    } catch(UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-        System.out.println("Error with playing sound.");
-    }
+
+    public void music() {
+        /*try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\alumno\\IdeaProjects\\BasePokeDatos\\src\\Sonidos\\LabMusicMod.wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            System.out.println("Error al ejecutar el sonido");
+        }*/
     }
 }
